@@ -5,9 +5,9 @@
 
 This project was chiefly inspired off the good work done by the Apollo, GitOps and OTP teams as given below:
 
-1)
-2)
-3)
+1) https://github.com/apollo-business-automation/ibm-cp4ba-enterprise-deployment 
+2) https://github.com/one-touch-provisioning/otp-gitops
+3) https://production-gitops.dev/ 
 
 
 ## Overview
@@ -29,3 +29,5 @@ This base implementation would not have been possible without the following indi
 
 1) Dalli Bagdi
 2) Leela Chitta
+
+Many thanks to the both of you.
