@@ -29,5 +29,6 @@ This base implementation would not have been possible without the following indi
 
 1) Dalli Bagdi
 2) Leela Chitta
-
-Many thanks to the both of you.
+3) Jan Dusek
+4) Ondrej Svec
+5) Tim Quigly
