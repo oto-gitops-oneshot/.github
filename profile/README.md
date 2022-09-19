@@ -34,7 +34,7 @@ This base implementation would not have been possible without the following indi
 5) Jan Dusek
 
 
-## Usage
+## Prerequisites
 
 This automation involves, as one would expect, the creation of secrets. Creating plain Kubernetes secrets and storing the corresponding K8's YAMLs as plain text in a Git Repository is ill advised. One way to circumnavigate this is through [SealedSecrets](https://github.com/bitnami-labs/sealed-secrets). That said, using SealedSecrets to handle a large number of secrets can quite get clunky. There is an overhead in relation to a number of steps that must be performed which, from a maintainability perspective, does not scale so well. On the other hand, we may need to integrate with a client secret store - they may prefer to use their own instance of Vault for example. As a result, we have externalised the secrets to an external store. We use the [ExternalSecret operator](https://external-secrets.io/v0.6.0-rc1/) to accomodate for this. As given in the link, the following (amongst others) secret manager instances are supported:
 
@@ -56,7 +56,7 @@ We have, for sake of simplicity, created a secret - the Universal Password - and
 The upshot of all this is one (as opposed to many) instance of a SealedSecret needs to be created, which is the secret required to access the aforementioned external secret store.
 
 
-### Secret Creation
+### Prerequisite - Secret Creation
 
 As mentioned earlier, we will leverage IBM Secrets Manager for this. Non-privileged accounts do get a thirty day free trial to deploy an instance of Secrets Manager in IBM Cloud. Refer to the image below.
 
@@ -126,7 +126,7 @@ Before proceeding with the enxt section, navigate to the "Endpoints" tab as give
 
 Well done! Give yourself a pat in the back before proceeding to the next section. 
 
-### Secret Updates
+### Prerequisite - Secret Updates
 
 Within the services repository you cloned, the following files need to be updated:
 
