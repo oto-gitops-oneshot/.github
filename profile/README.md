@@ -173,18 +173,70 @@ Please do note, we do ultimately want to provide automation around this, when th
 
 ## Usage
 
-Please complete the steps given in the [Setup](#Setup) before proceeding with this section. This discussion is limited to the main repository.
+Please ensure you have completed the steps given in the [Setup](#Setup) before proceeding with the upcoming sections.
+
+### Usage - Infra
 
 By default, lines 2 through to 6 (inclusive) found in the file "0-bootstrap/kustomization.yaml" are commented out. This is to ensure nothing is provisioned initially. See the image below.
 
 ![GitOps - Main Repo - Kustomize - Outer](Images/Bootstrap_Kustomization.png)
 
-Simply uncomment line 2 (the infra line), save, commit and push. Within a matter of a few minutes, the infrastructure components required to stand up CP4BA with FileNet and IER. For more information on the infrastructure components stood up, please refer to the [infra repository](https://github.com/oto-gitops-oneshot/otp-gitops-infra). The upshot of all this is that the infra app, app-project and child applications are created successfully and displaying a healthy status according to Argo.
-
+Simply uncomment line 2 (the infra line), save, commit and push. Within a matter of a few minutes, the infrastructure components required to stand up CP4BA with FileNet and IER are provisioned. The upshot of all this is that the infra app, app-project and child applications are created successfully and displaying a healthy status according to Argo.
 
 ![GitOps - Main Repo - Parent - Main App](Images/Parent-Infra-Service.png)
 
+Note the services application and appProject should not have been stood up at this stage. Use your power of imagination to fool you into believing they are not there yet.
 
 ![GitOps - Main Repo - Parent - Infra App](Images/Infra.png)
 
+ For more information on the infrastructure components stood up, please refer to the README provided in the [infra repository](https://github.com/oto-gitops-oneshot/otp-gitops-infra).
 
+### Usage - Service
+
+The infrastructure components stood up in the previous section included the sealed secret operator, thereby allowing downstream applications to create sealed secrets. As such, prior to uncommenting the services line in "0-bootstrap/kustomization.yaml", the secret granting access to the external secret store must be committed first to the repository. Please complete the following steps:
+
+1) Navigate to your cloned sevices repository, specifically to the "instances/api-key-sealedsecret" directory. Therein lies a script. It is pretty self explanatory. A sealedSecret is created from your ibm cloud api key you created in [Secrets](#prerequisite---secret-creation)
+2) Export your api key as an environment variable as given in the command below.
+3) Run the script. The command is provided below.
+4) Save, commit and push your changes.
+
+The commands are as follows:
+
+```
+export API_KEY="your_api_key_here"
+./api-key-sealedsecret.sh
+```
+
+Now, navigate back to the main repo. Uncomment the services entry found in the "0-bootstrap/kustomization.yaml" as given below. Save, commit your changes and push.
+
+![GitOps - Main Repo - Parent - Kustomize File](Images/Bootstrap-uncommented.png)
+
+The services app and appProject should have now been stood up as given below.
+
+![GitOps - Main Repo - Parent - Main App](Images/Parent-Infra-Service.png)
+
+And this kickstarts the provisioning of the child applications defined within the service application. The whole process should take approximately an hour (or perhaps a little more) to complete. This is the perfect time to sit back, reflect and question your life decisions that led you to this very moment. 
+
+![GitOps - Main Repo - Parent - Service App](Images/Services.png)
+
+The README provided in the [services repository](https://github.com/oto-gitops-oneshot/otp-gitops-services) offers a deeper insight into the resources provisioned.
+
+## Verification
+
+Congratulations! Give yourself another pat in the back. 
+
+The exposted routes for the various applications stood up can be found in the ConfigMap called **icp4adeploy-cp4ba-access-info** in the **cp4ba** namespace. For instance, the content platform engine route is as such:
+
+```
+Content Platform Engine administration: https://domain_here/cpe/acce/
+```
+
+And the navigator route:
+
+```
+Business Automation Navigator for CP4BA: https://domain_here/icn/navigator/
+```
+
+Needless to say, replace **domain_here** accordingly.
+
+The username and password are **cpadmin** and the value assigned to the **universalPassword** secret you created earlier.
