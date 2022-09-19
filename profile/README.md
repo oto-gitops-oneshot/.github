@@ -33,14 +33,22 @@ This base implementation would not have been possible without the following indi
 4) Tim Quigly
 5) Jan Dusek
 
+## Setup
+
+Please ensure you follow the steps outlined in the [main repository](https://github.com/oto-gitops-oneshot/otp-gitops). In particular, make sure the following steps are correctly executed:
+
+1) Step 1
+2) Step 2
+
+Include README's in the respective repositories as well. This includes warnings for example not to change names of roles, namespaces and so on and so forth.
 
 ## Prerequisites
 
 This automation involves, as one would expect, the creation of secrets. Creating plain Kubernetes secrets and storing the corresponding K8's YAMLs as plain text in a Git Repository is ill advised. One way to circumnavigate this is through [SealedSecrets](https://github.com/bitnami-labs/sealed-secrets). That said, using SealedSecrets to handle a large number of secrets can quite get clunky. There is an overhead in relation to a number of steps that must be performed which, from a maintainability perspective, does not scale so well. On the other hand, we may need to integrate with a client secret store - they may prefer to use their own instance of Vault for example. As a result, we have externalised the secrets to an external store. We use the [ExternalSecret operator](https://external-secrets.io/v0.6.0-rc1/) to accomodate for this. As given in the link, the following (amongst others) secret manager instances are supported:
 
-1) AWS Secrets Manager
-2) Azure Key Vault
-3) Google Secrets Manager
+1) Google Secrets Manager
+2) AWS Secrets Manager
+3) Azure Key Vault
 4) HashiCorp Vault
 
 This is great. Customers on AWS, Azure and Google will (most likely) use the corresponding secret providers given above. HashiCorp Vault is fairly popular too. This way, we "meet customers in the middle". 
@@ -163,3 +171,6 @@ Make sure you commit and push your changes accordingly.
 
 Please do note, we do ultimately want to provide automation around this, when this is consumable via TechZone. For now, bear with us. This is the automation that will happen behind the scenes in any case.
 
+## Usage
+
+Please complete the steps given in the [Markdown - Setup](#Setup) before proceeding with this section.
