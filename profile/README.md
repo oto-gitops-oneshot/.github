@@ -27,8 +27,8 @@ This is still a work in progress, we expect more work to be done here down the r
 
 This base implementation would not have been possible without the following individuals:
 
-1) Dalli Bagdi
-2) Leela Chitta
-3) Jan Dusek
-4) Ondrej Svec
-5) Tim Quigly
+1) Leela Chitta
+2) Dalli Bagdi
+3) Ondrej Svec
+4) Tim Quigly
+5) Jan Dusek
