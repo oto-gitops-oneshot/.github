@@ -44,7 +44,7 @@ Include README's in the respective repositories as well. This includes warnings 
 
 ## Prerequisites
 
-This automation involves, as one would expect, the creation of secrets. Creating plain Kubernetes secrets and storing the corresponding K8's YAMLs as plain text in a Git Repository is ill advised. One way to circumnavigate this is through [SealedSecrets](https://github.com/bitnami-labs/sealed-secrets). That said, using SealedSecrets to handle a large number of secrets can quite get clunky. There is an overhead in relation to a number of steps that must be performed which, from a maintainability perspective, does not scale so well. On the other hand, we may need to integrate with a client secret store - they may prefer to use their own instance of Vault for example. As a result, we have externalised the secrets to an external store. We use the [ExternalSecret operator](https://external-secrets.io/v0.6.0-rc1/) to accomodate for this. As given in the link, the following (amongst others) secret manager instances are supported:
+This automation involves, as one would expect, the creation of secrets. Creating plain Kubernetes secrets and storing the corresponding K8's YAMLs as plain text in a Git Repository is ill advised. One way to circumnavigate this is through [SealedSecrets](https://github.com/bitnami-labs/sealed-secrets). That said, using SealedSecrets to handle a large number of secrets can quite get clunky. It incurs a management overhead which, from a maintainability perspective, does not scale so well. On the other hand, we may need to integrate with a client secret store - customers may prefer to use their own instance of Vault for example. As a result, we have externalised the secrets to an external store. We use the [ExternalSecret operator](https://external-secrets.io/v0.6.0-rc1/) to accomodate for this. As given in the link, the following (amongst others) secret manager instances are supported:
 
 1) Google Secrets Manager
 2) AWS Secrets Manager
@@ -59,10 +59,9 @@ In this project, we leverage IBM Secrets Manager for [this](https://cloud.ibm.co
 2) An IBM Entitlement Key
 3) An LDAP secret (Admin and Config Password) assigned to the root user
 
-We have, for sake of simplicity, created a secret - the Universal Password - and assigned this secret to the various different services constituting this CloudPak, as we shall see in the next section. In a production setting, it is recommended to have a "one to one" mapping betwee secret and corresponding service as opposed to a "many to one" mapping as we have done here.
+We have, for sake of simplicity, created a secret - the Universal Password - and assigned this secret to the various different services constituting this CloudPak, as we shall see in the next section. In a production setting, it is recommended to have a "one to one" mapping between secret and corresponding service as opposed to a "many to one" mapping as we have done here. This is part of our roadmap.
 
 The upshot of all this is one (as opposed to many) instance of a SealedSecret needs to be created, which is the secret required to access the aforementioned external secret store.
-
 
 ### Prerequisite - Secret Creation
 
@@ -82,7 +81,7 @@ With that out of the way, we can now go ahead and create the secrets required to
 
 Take note of the key names here. It is recommended to leave them as such, otherwise you will have to update the names upstream in the relevant YAML files (which is dealt with in the upcoming section). Please mind the camelCase format should you choose to change the name, do not use snake_case or kebab-cases. These special characters are interpreted and parsed differently and will result in erraneous behaviour. 
 
-Follow the steps given below to create the adminPassword, universalPassword and configPasswords. It is of type string. Feel free to choose any string value you please. It is recommended to choose a random secure password. This [link](https://www.helperset.com/tools/generate-secure-string) generates a random secure string on demand. 15 or so characters should suffice. The default (32) is overkill.
+Follow the steps given below to create the adminPassword, universalPassword and configPasswords. The corresponding secrets are of type string. Feel free to choose any string value you please. It is recommended to choose a random secure password. This [link](https://www.helperset.com/tools/generate-secure-string) generates a random secure string on demand. 15 or so characters should suffice. The default (32) is overkill.
 
 Click "Add", located towards the right of the screen. You will be presented with the following options:
 
@@ -128,11 +127,11 @@ Your UI should resemble the following now.
 
 ![IBM Cloud - Secrets Manager - Final](Images/SM_Final.png)
 
-Before proceeding with the enxt section, navigate to the "Endpoints" tab as given below, and note down the Public Endpoint (highlighted) below:
+Before proceeding with the next section, navigate to the "Endpoints" tab as given below, and note down the Public Endpoint (highlighted) below:
 
 ![IBM Cloud - Secrets Manager - Public Endpoint](Images/SM_Public_Endpoints.png)
 
-Well done! Give yourself a pat in the back before proceeding to the next section. 
+Well done! Give yourself a pat in the back. 
 
 ### Prerequisite - Secret Updates
 
@@ -155,7 +154,7 @@ DB2_PATH=instances/db2
 LDAP_PATH=instances/openldap
 ```
 
-Specifically, the files given in list elements 1, 2, 4, 6 and 7 need to have their spec.data.remoteRef.key value updated with the id associated with the universalPassword secret you created in the previous section for the list entry with name universalPassword. If you used a different name, this name field would also need to be updated. Please refer to the image below. I've highlighted the relevant field to update. (Hint: this field is found in line 10 of each file)
+Specifically, the files given in list elements 1, 2, 4, 6 and 7 need to have their spec.data.remoteRef.key value updated with the id associated with the universalPassword secret you created in the previous section for the list entry with name universalPassword. If you used a different name, this name field would also need to be updated accordingly. Please refer to the image below. I've highlighted the relevant field to update. (Hint: this field is found in line 10 of each file)
 
 ![IBM Cloud - Secrets Manager - Details](Images/ES_Field.png)
 
@@ -163,7 +162,7 @@ Update list elements 3 and 8 with the id associated with the ibmEntitlementKey. 
 
 Finally, update list elements 5 and 9 with the LDAP admin and config passwords created in the previous section. It should be fairly straighforward to conclude as to what this procedure entails.
 
-Finally, modify the serviceUrl field in the "cluster-secret-store.yaml" file found in "instances/external-secrets-instance/overlays/default/" directory to coincide with the public endpoint of your secrets manager (vault) instance you noted down in the previous section. Please refer to the image below.
+Finally, modify the serviceUrl field in the **"cluster-secret-store.yaml"** file found in **"instances/external-secrets-instance/overlays/default/"** directory to coincide with the public endpoint of your secrets manager (vault) instance you noted down in the previous section. Please refer to the image below.
 
 ![IBM Cloud - Secrets Manager - Public Endpoint - YAML](Images/SM_ServiceUrl.png)
 
@@ -177,7 +176,7 @@ Please ensure you have completed the steps given in the [Setup](#Setup) before p
 
 ### Usage - Infra
 
-By default, lines 2 through to 6 (inclusive) found in the file "0-bootstrap/kustomization.yaml" are commented out. This is to ensure nothing is provisioned initially. See the image below.
+By default, lines 2 through to 6 (inclusive) found in the file **"0-bootstrap/kustomization.yaml"** are commented out. This is to ensure nothing is provisioned initially. See the image below.
 
 ![GitOps - Main Repo - Kustomize - Outer](Images/Bootstrap_Kustomization.png)
 
