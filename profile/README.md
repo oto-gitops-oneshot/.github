@@ -173,4 +173,18 @@ Please do note, we do ultimately want to provide automation around this, when th
 
 ## Usage
 
-Please complete the steps given in the [Markdown - Setup](#Setup) before proceeding with this section.
+Please complete the steps given in the [Setup](#Setup) before proceeding with this section. This discussion is limited to the main repository.
+
+By default, lines 2 through to 6 (inclusive) found in the file "0-bootstrap/kustomization.yaml" are commented out. This is to ensure nothing is provisioned initially. See the image below.
+
+![GitOps - Main Repo - Kustomize - Outer](Images/Bootstrap_Kustomization.png)
+
+Simply uncomment line 2 (the infra line), save, commit and push. Within a matter of a few minutes, the infrastructure components required to stand up CP4BA with FileNet and IER. For more information on the infrastructure components stood up, please refer to the [infra repository](https://github.com/oto-gitops-oneshot/otp-gitops-infra). The upshot of all this is that the infra app, app-project and child applications are created successfully and displaying a healthy status according to Argo.
+
+
+![GitOps - Main Repo - Parent - Main App](Images/Parent-Infra-Service.png)
+
+
+![GitOps - Main Repo - Parent - Infra App](Images/Infra.png)
+
+
