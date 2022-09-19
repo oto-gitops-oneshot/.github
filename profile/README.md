@@ -59,3 +59,65 @@ The upshot of all this is one instance of a SealedSecret needs to be created, wh
 As mentioned earlier, we will leverage IBM Secrets Manager for this. Non-privileged accounts do get a thirty day free trial to deploy an instance of Secrets Manager in IBM Cloud. Refer to the image below.
 
 ![IBM Cloud - Secrets Manager](Images/SecretsManagerIBMCloud.png)
+
+First and foremost, you will need an API Key to access this instance programmatically (this API Key is our SealedSecret).
+
+![IBM Cloud - Secrets Manager - API Key](Images/API_KEY.png)
+
+For more information on how to obtain an API Key, please refer to the following [link] (https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui). I do encourage you to read the third paragraph found in the link should you wish to deploy this asset in a production setting. In particular: "it is recommended that you create an API key that is associated with a functional ID that is assigned the minimum level of access that is required to work with the service". This is a no brainer. Abiding by the principles of least privilege, (or common sense) your API Key should only have READ access to said instance, no more and no less.
+
+With that out of the way, we can now go ahead and create the secrets required to standup the CloudPak. Your UI should resemble the following once you are done with the procedure.
+
+![IBM Cloud - Secrets Manager - UI](Images/SM_UI.png)
+
+Take note of the key names here. It is recommended to leave them as such, otherwise you will have to update the names upstream in the relevant YAML files (which I will outline soon). Please mind the camelCase should you choose to change the name, do not use snake_case or kebab-cases. These special characters are interpreted and parsed differently and will result in erraneous behaviour. 
+
+Follow the steps given below to create the adminPassword, universalPassword and configPasswords. It is of type string. Feel free to choose any string value you please. It is recommended to choose a random secure password. This [link] (https://www.helperset.com/tools/generate-secure-string) genertes a random secure string on demand. 15 or so characters should suffice. THe default (32) is overkill.
+
+Click "Add", locsted towards the right of the screen. You will be presented with the following options.
+
+![IBM Cloud - Secrets Manager - Options](Images/SM_Options.png)
+
+Click "Other Secret Type". You will be given the following.
+
+![IBM Cloud - Secrets Manager - Options](Images/SM_Other.png)
+
+The name should correspond to the names given earlier. If they do choose to use a different name bear in mind the strict camelCase convention imposed. Populate the secret value with the random secure string mentioned earlier. Take note of the ID associated with this password and store it somewhere for the time being. Refer to the image below in the event you don't have the ID's handy.
+
+![IBM Cloud - Secrets Manager - Details](Images/SM_Details.png)
+
+Rinse and repeat till the following passwords are created in secrets manager:
+
+1) universalPassword
+2) adminPassword
+3) configPassword
+
+The IBM Entitlement Key creation is slightly more involved. You will have to obtain the JSON representation of the entitlement key. 
+
+First and foremost, navigate to this [site] (https://myibm.ibm.com/products-services/containerlibrary) to obtain your key. Once the key is obtained, run the following bad boy of a command:
+
+```
+oc create secret docker-registry ibm-entitlement-key --dry-run=client -o json \
+--docker-username=cp \
+--docker-password="your_ibm_entitlement_key_here" \
+--docker-server=cp.icr.io \
+--docker-email=your_email_here@ibm.com | jq '.data.".dockerconfigjson"' |  tr -d '"' | base64 --decode
+```
+
+The following assumptions are made:
+
+1) The "oc" binary is installed and present in the path variable
+2) The "jq" binary is installed and present in the path variable
+3) Unix/Linux machine
+
+You need not login to an openshift cluster for this thanks to the dry-run parameter present in the command.
+
+Be sure to replace the values associated with the docker-password and docker-emails fields accordingly. Copy the output and follow the same procedure for secret creation as given above for the ibm entitltment key, except this time you will be pasting the output as opposed to generating a random secure string. Please make note of the ID here as well.
+
+Your UI should resemble the following now.
+
+
+
+Well done! Give yourself a pat in the back before proceeding to the next section. 
+
+### Secret Updates
