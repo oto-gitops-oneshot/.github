@@ -120,7 +120,46 @@ Your UI should resemble the following now.
 
 ![IBM Cloud - Secrets Manager - Final](Images/SM_Final.png)
 
+Before proceeding with the enxt section, navigate to the "Endpoints" tab as given below, and note down the Public Endpoint (highlighted) below:
+
+![IBM Cloud - Secrets Manager - Public Endpoint](Images/SM_Public_Endpoints.png)
+
 Well done! Give yourself a pat in the back before proceeding to the next section. 
 
 ### Secret Updates
+
+Within the services repository you cloned, the following files need to be updated:
+
+1) SECRET_PATH/ban.yaml
+2) SECRET_PATH/fncm.yaml
+3) SECRET_PATH/ibm-entitlement-key.yaml
+4) SECRET_PATH/ier.yaml
+5) SECRET_PATH/ldap-bind.yaml
+6) SECRET_PATH/rr.yaml
+7) SECRET_PATH/universal-password.yaml
+8) DB2_PATH/create/base/pull-secret.yaml
+9) LDAP_PATH/templates/external-admin-secret.yaml
+
+Where:
+```
+SECRET_PATH=instances/cloudpak/cp4ba/predeploy/secrets
+DB2_PATH=instances/db2
+LDAP_PATH=instances/openldap
+```
+
+Specifically, the files given in list elements 1, 2, 4, 6 and 7 need to have their spec.data.remoteRef.key value updated with the id associated with the universalPassword secret you created in the previous section for the list entry with name universalPassword. If you used a different name, this name field would also need to be updated. Please refer to the image below. I've highlighted the relevant field to update. (Hint: this field is found in line 10 of each file)
+
+![IBM Cloud - Secrets Manager - Details](Images/ES_Field.png)
+
+Update list elements 3 and 8 with the id associated with the ibmEntitlementKey. If you used a different name, this name field would also need to be updated. (Hint: this field is found in line 10 of each file)
+
+Finally, update list elements 5 and 9 with the LDAP admin and config passwords created in the previous section. It should be fairly straighforward to conclude as to what this procedure entails.
+
+Finally, modify the serviceUrl field in the "cluster-secret-store.yaml" file found in "instances/external-secrets-instance/overlays/default/" directory to coincide with the public endpoint of your secrets manager (vault) instance you noted down in the previous section. Please refer to the image below.
+
+![IBM Cloud - Secrets Manager - Public Endpoint - YAML](Images/SM_ServiceUrl.png)
+
+Make sure you commit and push your changes accordingly.
+
+Please do note, we do ultimately want to provide automation around this, when this is consumable via TechZone. For now, bear with us. This is the automation that will happen behind the scenes in any case.
 
