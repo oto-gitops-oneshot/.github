@@ -239,3 +239,10 @@ Business Automation Navigator for CP4BA: https://domain_here/icn/navigator/
 Needless to say, replace **domain_here** accordingly.
 
 The username and password are **cpadmin** and the value assigned to the **universalPassword** secret you created earlier.
+
+
+## Roadmap
+
+As this was intially driven by a client POC, we do plan to iterate on this, and make this a fully fledged consumable product in the upcoming future. We do plan to tackle the following points progressively:
+
+1) TODO: Fill this out
