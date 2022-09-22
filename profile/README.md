@@ -35,12 +35,17 @@ This base implementation would not have been possible without the following indi
 
 ## Setup
 
-Please ensure you follow the steps outlined in the [main repository](https://github.com/oto-gitops-oneshot/otp-gitops). In particular, make sure the following steps are correctly executed:
+Please ensure you follow the steps outlined in the [main repository](https://github.com/oto-gitops-oneshot/otp-gitops). For those of you not familiar with the pattern, the sections starting with [Elevator Pitch]() and ending in [Use Cases](https://github.com/oto-gitops-oneshot/otp-gitops#use-cases-for-different-git-repository-organisation) establish the context and motivation quite well.
 
-1) Step 1
-2) Step 2
+With that out of the way, please ensure the commands contained in the sections starting with [Setup Git Repositories](https://github.com/oto-gitops-oneshot/otp-gitops#use-cases-for-different-git-repository-organisation) and ending in the **third** command in [Bootstrap the OpenShift Cluster](https://github.com/oto-gitops-oneshot/otp-gitops#bootstrap-the-openshift-cluster-) are executed successfully.
 
-Include README's in the respective repositories as well. This includes warnings for example not to change names of roles, namespaces and so on and so forth.
+For sake of completeness, the third command stated above is:
+
+```
+oc apply -f 0-bootstrap/hub/bootstrap.yaml
+```
+
+You may proceed with the next section now.
 
 ## Prerequisites
 
