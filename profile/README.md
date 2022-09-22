@@ -44,7 +44,7 @@ Include README's in the respective repositories as well. This includes warnings 
 
 ## Prerequisites
 
-This automation involves, as one would expect, the creation of secrets. Creating plain Kubernetes secrets and storing the corresponding K8's YAMLs as plain text in a Git Repository is ill advised. One way to circumnavigate this is through [SealedSecrets](https://github.com/bitnami-labs/sealed-secrets). That said, using SealedSecrets to handle a large number of secrets can quite get clunky. It incurs a management overhead which, from a maintainability perspective, does not scale so well. On the other hand, we may need to integrate with a client secret store - customers may prefer to use their own instance of Vault for example. As a result, we have externalised the secrets to an external store. We use the [ExternalSecret operator](https://external-secrets.io/v0.6.0-rc1/) to accomodate for this. As given in the link, the following (amongst others) secret manager instances are supported:
+This automation involves, as one would expect, the creation of secrets. Creating plain Kubernetes secrets and storing the corresponding K8's YAMLs as plain text in a Git Repository is ill advised. One way to circumnavigate this is through [SealedSecrets](https://github.com/bitnami-labs/sealed-secrets). That said, using SealedSecrets to handle a large number of secrets can quite get clunky. It incurs a management overhead which, from a maintainability perspective, does not scale so well. In practice, integrating with a pre-existing client secret store is the most likely scenario - as opposed to internally managing secrets ourselves. As a result, we have externalised the secrets to an external store. We use the [ExternalSecret operator](https://external-secrets.io/v0.6.0-rc1/) to accomodate for this. As given in the link, the following (amongst others) secret manager instances are supported:
 
 1) Google Secrets Manager
 2) AWS Secrets Manager
@@ -53,13 +53,13 @@ This automation involves, as one would expect, the creation of secrets. Creating
 
 This is great. Customers on AWS, Azure and Google will (most likely) use the corresponding secret providers given above. HashiCorp Vault is fairly popular too. This way, we "meet customers in the middle". 
 
-In this project, we leverage IBM Secrets Manager for [this](https://cloud.ibm.com/docs/secrets-manager?topic=secrets-manager-vault-api), which uses a custom version of open source HashiCorp Vault for this. The secrets we need to create to standup CP4BA with FileNet and IER are the following:
+In this project, we leverage IBM Secrets Manager for [this](https://cloud.ibm.com/docs/secrets-manager?topic=secrets-manager-vault-api), which uses a custom version of open source HashiCorp Vault, one of the supported instance types as mentioned above. The secrets we need to create to standup CP4BA with FileNet and IER are the following:
 
 1) A Universal Password
 2) An IBM Entitlement Key
 3) An LDAP secret (Admin and Config Password) assigned to the root user
 
-We have, for sake of simplicity, created a secret - the Universal Password - and assigned this secret to the various different services constituting this CloudPak, as we shall see in the next section. In a production setting, it is recommended to have a "one to one" mapping between secret and corresponding service as opposed to a "many to one" mapping as we have done here. This is part of our roadmap.
+We have, for sake of simplicity, created a secret, aptly called universalPassword, and assigned this secret to the various different services constituting this CloudPak, as we shall see in the next section. In a production setting, it is recommended to have a "one to one" mapping between secret and corresponding service as opposed to a "many to one" mapping as we have done here. This is part of our roadmap.
 
 The upshot of all this is one (as opposed to many) instance of a SealedSecret needs to be created, which is the secret required to access the aforementioned external secret store.
 
@@ -160,7 +160,7 @@ Specifically, the files given in list elements 1, 2, 4, 6 and 7 need to have the
 
 Update list elements 3 and 8 with the id associated with the ibmEntitlementKey. If you used a different name, this name field would also need to be updated. (Hint: this field is found in line 10 of each file)
 
-Finally, update list elements 5 and 9 with the LDAP admin and config passwords created in the previous section. It should be fairly straighforward to conclude as to what this procedure entails.
+Update list elements 5 and 9 with the LDAP admin and config passwords created in the previous section. It should be fairly straighforward to conclude as to what this procedure entails.
 
 Finally, modify the serviceUrl field in the **"cluster-secret-store.yaml"** file found in **"instances/external-secrets-instance/overlays/default/"** directory to coincide with the public endpoint of your secrets manager (vault) instance you noted down in the previous section. Please refer to the image below.
 
@@ -168,7 +168,7 @@ Finally, modify the serviceUrl field in the **"cluster-secret-store.yaml"** file
 
 Make sure you commit and push your changes accordingly.
 
-Please do note, we do ultimately want to provide automation around this, when this is consumable via TechZone. For now, bear with us. This is the automation that will happen behind the scenes in any case.
+Please do note, we do ultimately want to provide automation around this, when this is consumable via TechZone. For now, bear with us. This is the automation we foresee being carried out behind the scenes in any case.
 
 ## Usage
 
@@ -188,7 +188,7 @@ Note the services application and appProject should not have been stood up at th
 
 ![GitOps - Main Repo - Parent - Infra App](Images/Infra.png)
 
- For more information on the infrastructure components stood up, please refer to the README provided in the [infra repository](https://github.com/oto-gitops-oneshot/otp-gitops-infra).
+For more information on the infrastructure components stood up, please refer to the README provided in the [infra repository](https://github.com/oto-gitops-oneshot/otp-gitops-infra).
 
 ### Usage - Service
 
