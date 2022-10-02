@@ -37,7 +37,7 @@ This base implementation would not have been possible without the following indi
 
 Please ensure you follow the steps outlined in the [main repository](https://github.com/oto-gitops-oneshot/otp-gitops). For those of you not familiar with the pattern, the sections starting with [Elevator Pitch](https://github.com/oto-gitops-oneshot/otp-gitops#elevator-pitch) and ending in [Use Cases](https://github.com/oto-gitops-oneshot/otp-gitops#use-cases-for-different-git-repository-organisation) establish the context and motivation quite well.
 
-With that out of the way, please ensure the commands contained in the sections starting with [Setup Git Repositories](https://github.com/oto-gitops-oneshot/otp-gitops#setup-git-repositories) and ending (**not inclusive**) in the **third** command in [Bootstrap the OpenShift Cluster](https://github.com/oto-gitops-oneshot/otp-gitops#bootstrap-the-openshift-cluster-) are executed successfully.
+With that out of the way, please ensure the commands contained in the sections starting with [Setup Git Repositories](https://github.com/oto-gitops-oneshot/otp-gitops#setup-git-repositories) and ending (**inclusive**) in the **third** command in [Bootstrap the OpenShift Cluster](https://github.com/oto-gitops-oneshot/otp-gitops#bootstrap-the-openshift-cluster-) are executed successfully.
 
 For sake of completeness, the third command stated above is:
 
@@ -45,7 +45,7 @@ For sake of completeness, the third command stated above is:
 oc apply -f 0-bootstrap/hub/bootstrap.yaml
 ```
 
-To re-iterate, do not execute this command just yet. Once you've obtained the Argo URL and password, you may proceed with the next section below.
+Once you've executed the above command anc wuccessfully obtained the Argo URL and password, you may proceed with the next section below.
 
 ## Prerequisites
 
